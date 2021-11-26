@@ -13,6 +13,7 @@ type Drawinger interface {
 
 
 const (
+  arenaWidth, arenaHeight  = 640, 480
   screenWidth, screenHeight = 640, 480
   zoom = 2
 )
@@ -20,6 +21,7 @@ const (
 var(
   green   = color.RGBA{10, 255, 50, 255}
 
+  arena *Arena
   oid Drawinger
 )
 
@@ -33,6 +35,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
   //screen.Fill(color.RGBA{R: 0xff, G: 0, B: 0, A: 0xff})
   //ebitenutil.DebugPrint(screen, "Hello, World!")
 
+  _ = arena.draw(screen, g)
   _ = g.drawCritter(screen, oid)
 
 }
@@ -55,7 +58,13 @@ func EbMain() {
 
   oid = dinger
 
-  ebiten.SetWindowSize(screenWidth * zoom, screenHeight * zoom)
+  arena = NewArena(IVec2d{
+    X: arenaWidth,
+    Y: arenaHeight,
+  })
+
+  //ebiten.SetWindowSize(screenWidth * zoom, screenHeight * zoom)
+  ebiten.SetWindowSize(screenWidth, screenHeight)
   ebiten.SetWindowTitle("Hello, World!")
   if err := ebiten.RunGame(&Game{}); err != nil {
     log.Fatal(err)
