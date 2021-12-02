@@ -2,17 +2,8 @@ package pg
 
 import (
   "github.com/hajimehoshi/ebiten/v2"
-  "image/color"
 )
 
-var (
- red     = color.RGBA{R: 255, G: 10, B: 10, A: 255}
- //bgImage = ebiten.NewImage(arenaWidth, arenaHeight)
-)
-
-//func init() {
-//  bgImage.Fill(red)
-//}
 
 type Arena struct {
   dim IVec2d    /* dimension of the arena */
@@ -27,7 +18,7 @@ func NewArena(dim IVec2d) *Arena {
     bgImage: ebiten.NewImage(int(w), int(h)),
   }
 
-  a.bgImage.Fill(red)
+  a.bgImage.Fill(backgroundColor)
 
   return &a
 }

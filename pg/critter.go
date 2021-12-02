@@ -1,10 +1,12 @@
 package pg
 
-import "github.com/hajimehoshi/ebiten/v2"
+import (
+  "github.com/hajimehoshi/ebiten/v2"
+  "time"
+)
 
 type  Critter struct {
   loc    Vec2d /* location */
-  vel    Vec2d /* velocity */
   id     int
   health float64
 }
@@ -13,19 +15,55 @@ type  Critter struct {
 func NewCritter() *Critter {
   c := Critter{
     loc: Vec2d{X: 30, Y: 30},
-    vel: Vec2d{X: 0, Y: 0},
     id: 0,
     health: 0.0,
   }
   return &c
 }
 
+func (c *Critter) run() {
+  go func() {
+
+    for {
+      c.loc = c.loc.Add(Vec2d{
+        X: 1,
+        Y: 1,
+      })
+
+      //time.Sleep(250 * time.Millisecond)
+      time.Sleep(1000 * time.Millisecond)
+    }
+
+  }()
+}
+
 // The draw function draws the critter on an ebiten.Image.
-func (critter *Critter) draw(screen *ebiten.Image, g *Game) error {
-  screen.Set(int(critter.loc.X), int(critter.loc.Y), green)
-  screen.Set(int(critter.loc.X+1), int(critter.loc.Y), green)
-  screen.Set(int(critter.loc.X), int(critter.loc.Y+1), green)
-  screen.Set(int(critter.loc.X+1), int(critter.loc.Y+1), green)
+func (c *Critter) draw(screen *ebiten.Image, g *Game) error {
+
+  if zoommode == FourSquare {
+    screen.Set(int(c.loc.X),   int(c.loc.Y),   critterColor)
+    screen.Set(int(c.loc.X+1), int(c.loc.Y),   critterColor)
+    screen.Set(int(c.loc.X),   int(c.loc.Y+1), critterColor)
+    screen.Set(int(c.loc.X+1), int(c.loc.Y+1), critterColor)
+
+  } else if zoommode == BigFour {
+    screen.Set(int(c.loc.X-1), int(c.loc.Y-1), critterColor)
+    screen.Set(int(c.loc.X+1), int(c.loc.Y-1), critterColor)
+    screen.Set(int(c.loc.X-1), int(c.loc.Y+1), critterColor)
+    screen.Set(int(c.loc.X+1), int(c.loc.Y+1), critterColor)
+
+    screen.Set(int(c.loc.X-2), int(c.loc.Y-2), critterColor)
+    screen.Set(int(c.loc.X+2), int(c.loc.Y-2), critterColor)
+    screen.Set(int(c.loc.X-2), int(c.loc.Y+2), critterColor)
+    screen.Set(int(c.loc.X+2), int(c.loc.Y+2), critterColor)
+
+  } else {
+    screen.Set(int(c.loc.X),   int(c.loc.Y),   critterColor)
+    screen.Set(int(c.loc.X+1), int(c.loc.Y),   critterColor)
+    screen.Set(int(c.loc.X),   int(c.loc.Y+1), critterColor)
+    screen.Set(int(c.loc.X+1), int(c.loc.Y+1), critterColor)
+
+  }
 
   return nil
 }
